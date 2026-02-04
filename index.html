@@ -269,6 +269,75 @@
   .drug-meth { border-top: 3px solid #4a9ad4; }
   .drug-meth .drug-name { color: #4a9ad4; }
 
+  /* CHAIN FLOW VISUALIZATION */
+  .chain-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 0 0 24px;
+    padding: 18px 24px;
+    overflow-x: auto;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    background: var(--card);
+  }
+  .chain-flow .cf-node {
+    background: #1a1a1a;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 10px 18px;
+    text-align: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .chain-flow .cf-node .cf-icon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 6px;
+    color: var(--green-dim);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .chain-flow .cf-node .cf-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+  .chain-flow .cf-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 6px;
+    flex-shrink: 0;
+    min-width: 60px;
+  }
+  .chain-flow .cf-arrow .cf-line {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, var(--green-dim), var(--green));
+    position: relative;
+  }
+  .chain-flow .cf-arrow .cf-line::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: -4px;
+    border-left: 8px solid var(--green);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+  .chain-flow .cf-arrow .cf-item {
+    font-size: 0.65rem;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    margin-top: 6px;
+  }
+
   /* NOTES/CALLOUTS */
   .note {
     background: var(--green-glow);
@@ -603,8 +672,14 @@
 
     <!-- CHAIN A -->
     <h3>Chain A &mdash; Banking <code>op-crime</code></h3>
+    <div class="chain-flow">
+      <div class="cf-node" style="border-top:3px solid #8aab89"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 10h18M12 3l9 7H3zM7 10v11M12 10v11M17 10v11"/></svg><div class="cf-name">Fleeca Bank</div><span class="tier tier-1">Tier 1</span></div>
+      <div class="cf-arrow"><div class="cf-line"></div><div class="cf-item">Paleto Access Card</div></div>
+      <div class="cf-node" style="border-top:3px solid #c4d48a"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="12" cy="12" r="4"/><path d="M12 8v8M8 12h8"/></svg><div class="cf-name">Paleto Bank</div><span class="tier tier-2">Tier 2</span></div>
+      <div class="cf-arrow"><div class="cf-line"></div><div class="cf-item">Pacific Standard Blueprints</div></div>
+      <div class="cf-node" style="border-top:3px solid #d4b48a"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><div class="cf-name">Pacific Standard</div><span class="tier tier-3">Chain Final</span></div>
+    </div>
     <div class="card">
-      <p class="route">Store/Gang &rarr; Fleeca Bank &rarr; Paleto Bank &rarr; Pacific Standard Vault</p>
 
       <h4>Fleeca Bank <span class="tier tier-1">Tier 1</span></h4>
       <p>Players: 3 &bull; Time: ~30 min &bull; Equip: $15,000 &bull; Min. Police: <strong>4</strong></p>
@@ -665,8 +740,14 @@
 
     <!-- CHAIN B -->
     <h3>Chain B &mdash; Luxury Heists</h3>
+    <div class="chain-flow">
+      <div class="cf-node" style="border-top:3px solid #8aab89"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 7-10 12L2 10z"/><path d="M2 10h20"/></svg><div class="cf-name">Vangelico Jewelry</div><span class="tier tier-1">Tier 1</span></div>
+      <div class="cf-arrow"><div class="cf-line"></div><div class="cf-item">Yacht Invitation</div></div>
+      <div class="cf-node" style="border-top:3px solid #c4d48a"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18l-2-6H5z"/><path d="M12 3v8"/><path d="M12 3l6 8"/><path d="M2 21c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg><div class="cf-name">Yacht Heist</div><span class="tier tier-2">Tier 2</span></div>
+      <div class="cf-arrow"><div class="cf-line"></div><div class="cf-item">Oil Rig Security Badge</div></div>
+      <div class="cf-node" style="border-top:3px solid #d4b48a"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v5M10 7h4"/><path d="M7 21l3-14h4l3 14"/><path d="M8 14h8M9 18h6"/></svg><div class="cf-name">Oil Rig</div><span class="tier tier-3">Chain Final</span></div>
+    </div>
     <div class="card">
-      <p class="route">Store/Gang &rarr; Vangelico Jewelry &rarr; Yacht &rarr; Oil Rig</p>
 
       <h4>Vangelico Jewelry <span class="tier tier-1">Tier 1</span> &mdash; <code>kq_smash_n_grab2</code></h4>
       <p>Players: 3 &bull; Time: ~30 min &bull; Equip: $20,000 &bull; Min. Police: <strong>4</strong></p>
@@ -727,8 +808,14 @@
 
     <!-- CHAIN C -->
     <h3>Chain C &mdash; Cayo Perico</h3>
+    <div class="chain-flow">
+      <div class="cf-node" style="border-top:3px solid #8aab89"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg><div class="cf-name">Cayo Scope</div><span class="tier tier-1">Tier 1</span></div>
+      <div class="cf-arrow"><div class="cf-line"></div><div class="cf-item">Cayo Shipping Manifest</div></div>
+      <div class="cf-node" style="border-top:3px solid #c4d48a"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="13" rx="1"/><path d="M12 8v13M2 14h20"/><path d="M7 3h10l3 5H4z"/></svg><div class="cf-name">Cayo Shipping</div><span class="tier tier-2">Tier 2</span></div>
+      <div class="cf-arrow"><div class="cf-line"></div><div class="cf-item">Cayo Main Access Codes</div></div>
+      <div class="cf-node" style="border-top:3px solid #d4b48a"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C7.5 2 4 5.5 4 10c0 3 1.5 5.5 4 6.5V19h8v-2.5c2.5-1 4-3.5 4-6.5 0-4.5-3.5-8-8-8z"/><circle cx="9" cy="10" r="1.5"/><circle cx="15" cy="10" r="1.5"/><path d="M10 19v2M14 19v2"/></svg><div class="cf-name">Main Cayo Perico</div><span class="tier tier-3">Chain Final</span></div>
+    </div>
     <div class="card">
-      <p class="route">Store/Gang &rarr; Cayo Scope &rarr; Cayo Shipping &rarr; Main Cayo</p>
 
       <h4>Cayo Scope &amp; Setup <span class="tier tier-1">Tier 1</span> &mdash; <code>ssrp_cayo</code></h4>
       <p>Players: 3 &bull; Time: ~35 min &bull; Equip: $30,000 &bull; Min. Police: <strong>4</strong></p>
@@ -789,8 +876,12 @@
 
     <!-- CHAIN D -->
     <h3>Chain D &mdash; Casino</h3>
+    <div class="chain-flow">
+      <div class="cf-node" style="border-top:3px solid #8aab89"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="8.5" cy="15.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15.5" r="1" fill="currentColor" stroke="none"/></svg><div class="cf-name">Casino Floor</div><span class="tier tier-1">Tier 1</span></div>
+      <div class="cf-arrow"><div class="cf-line"></div><div class="cf-item">Penthouse Keycard</div></div>
+      <div class="cf-node" style="border-top:3px solid #d4b48a"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8l4 10h12l4-10-5 4-5-6-5 6z"/><path d="M6 20h12"/></svg><div class="cf-name">Casino Penthouse</div><span class="tier tier-3">Chain Final</span></div>
+    </div>
     <div class="card">
-      <p class="route">Store/Gang &rarr; Casino Floor &rarr; Casino Penthouse</p>
 
       <h4>Casino Floor Heist <span class="tier tier-1">Tier 1</span> &mdash; <code>k4mb1-casino</code></h4>
       <p>Players: 3 &bull; Time: ~35 min &bull; Equip: $30,000 &bull; Min. Police: <strong>4</strong></p>
@@ -834,8 +925,14 @@
 
     <!-- CHAIN E -->
     <h3>Chain E &mdash; Rural Underground</h3>
+    <div class="chain-flow">
+      <div class="cf-node" style="border-top:3px solid #8aab89"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v11h14V10"/><path d="M10 21v-6h4v6"/></svg><div class="cf-name">O'Neil's Ranch</div><span class="tier tier-1">Tier 1</span></div>
+      <div class="cf-arrow"><div class="cf-line"></div><div class="cf-item">Butchery Delivery Note</div></div>
+      <div class="cf-node" style="border-top:3px solid #c4d48a"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="10" height="12" rx="1"/><path d="M4 8h10"/><path d="M9 14v8"/><path d="M7 22h4"/></svg><div class="cf-name">Butchery</div><span class="tier tier-2">Tier 2</span></div>
+      <div class="cf-arrow"><div class="cf-line"></div><div class="cf-item">Mining Shaft Access Key</div></div>
+      <div class="cf-node" style="border-top:3px solid #d4b48a"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 7-10 12-10-12z"/><path d="M2 10h20"/><path d="M10 10l2 12M14 10l-2 12"/></svg><div class="cf-name">Mining Shaft</div><span class="tier tier-3">Chain Final</span></div>
+    </div>
     <div class="card">
-      <p class="route">Store/Gang &rarr; O'Neil's Ranch &rarr; Butchery &rarr; Mining Shaft</p>
       <p class="dim" style="font-size:0.85rem;margin-bottom:16px;"><em>Raid the meth ranch, follow the supply chain to the butchery front business, discover and hit the hidden mining operation underneath.</em></p>
 
       <h4>O'Neil's Ranch <span class="tier tier-1">Tier 1</span> &mdash; <code>ssrp_oneilsranchheist</code></h4>
@@ -894,8 +991,12 @@
 
     <!-- CHAIN F -->
     <h3>Chain F &mdash; Military</h3>
+    <div class="chain-flow">
+      <div class="cf-node" style="border-top:3px solid #8aab89"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><path d="M12 8v14"/><path d="M5 12H2c0 5.5 4.5 10 10 10s10-4.5 10-10h-3"/><path d="M8 12h8"/></svg><div class="cf-name">Merryweather Port</div><span class="tier tier-1">Tier 1</span></div>
+      <div class="cf-arrow"><div class="cf-line"></div><div class="cf-item">Humane Labs Access Codes</div></div>
+      <div class="cf-node" style="border-top:3px solid #d4b48a"><svg class="cf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v7l-5 8a2 2 0 001.7 3h10.6a2 2 0 001.7-3l-5-8V3"/><path d="M7 17h10"/></svg><div class="cf-name">Humane Labs</div><span class="tier tier-3">Chain Final</span></div>
+    </div>
     <div class="card">
-      <p class="route">Store/Gang &rarr; Merryweather Port &rarr; Humane Labs</p>
       <p class="dim" style="font-size:0.85rem;margin-bottom:16px;"><em>Infiltrate the Merryweather shipping port for intel and military hardware, then use what you find to breach the Humane Labs research facility.</em></p>
 
       <h4>Merryweather Port <span class="tier tier-1">Tier 1</span> &mdash; <code>ssrp_merryweatherport</code></h4>
@@ -1166,11 +1267,11 @@
     <h3>Blueprint Design Rules</h3>
     <div class="card card-accent">
       <ol style="padding-left:18px;font-size:0.9rem;">
-        <li style="margin-bottom:8px;"><strong>Fragments are personal.</strong> Cannot be traded, sold, or dropped.</li>
+        <li style="margin-bottom:8px;"><strong>Fragments are tradeable items.</strong> Can be traded, sold, or dropped. Encourages inter-gang deals and RP &mdash; a crew with 2 Armour Mould fragments might trade with another gang for the third.</li>
         <li style="margin-bottom:8px;"><strong>Crafted items are NOT permanent.</strong> Weapons degrade and armour breaks. Creates ongoing material sink.</li>
         <li style="margin-bottom:8px;"><strong>Crafted items CAN be lost.</strong> If you die and get looted, or get arrested, the item is gone.</li>
         <li style="margin-bottom:8px;"><strong>Re-crafting is cheaper.</strong> Once complete, future crafts only need materials + money (no fragments).</li>
-        <li><strong>Fragments persist through death/arrest.</strong> Stored in separate blueprint inventory that isn't lootable.</li>
+        <li><strong>Fragments can be lost.</strong> Since they're regular inventory items, they can be looted on death or seized on arrest. High risk, high reward &mdash; protect your fragments.</li>
       </ol>
     </div>
 
