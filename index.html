@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crime Economy Rebalance Proposal</title>
+<style>
+  :root {
+    --green: #b4d1b3;
+    --green-dim: #8aab89;
+    --green-glow: rgba(180,209,179,0.15);
+    --bg: #0d0d0d;
+    --card: #151515;
+    --card-border: #222;
+    --text: #e0e0e0;
+    --text-dim: #999;
+    --white: #fff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a2a1a 100%);
+    border-bottom: 2px solid var(--green);
+    padding: 48px 0 40px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 2.4rem;
+    color: var(--white);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  header .subtitle {
+    color: var(--green);
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  /* NAV */
+  nav {
+    background: #111;
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+  }
+  nav .container {
+    display: flex;
+    gap: 0;
+    padding: 0;
+  }
+  nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 14px 18px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  nav a:hover {
+    color: var(--green);
+    border-bottom-color: var(--green);
+    background: var(--green-glow);
+  }
+
+  /* SECTIONS */
+  section { padding: 48px 0; }
+  section:nth-child(even) { background: #111; }
+  h2 {
+    font-size: 1.5rem;
+    color: var(--green);
+    margin-bottom: 24px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--card-border);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  h3 {
+    font-size: 1.15rem;
+    color: var(--white);
+    margin: 28px 0 14px;
+  }
+  h4 {
+    font-size: 1rem;
+    color: var(--green);
+    margin: 22px 0 10px;
+  }
+  p { margin-bottom: 14px; color: var(--text); }
+  strong { color: var(--white); }
+  .highlight { color: var(--green); font-weight: 600; }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-accent {
+    border-left: 3px solid var(--green);
+  }
+
+  /* STAT GRID */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-box .label {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .stat-box .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .stat-box .sub {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 20px;
+    font-size: 0.88rem;
+  }
+  thead th {
+    background: #1a1a1a;
+    color: var(--green);
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--green-dim);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #222;
+    vertical-align: top;
+  }
+  tbody tr:hover { background: var(--green-glow); }
+  tbody tr.row-highlight td { color: var(--green); font-weight: 600; }
+  tbody tr.row-bold td { font-weight: 700; color: var(--white); }
+  td.money { color: var(--green); font-weight: 600; white-space: nowrap; }
+  td.dim { color: var(--text-dim); }
+
+  /* CHAIN CARDS */
+  .chain-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+  }
+  .chain-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 24px;
+    border-top: 3px solid var(--green);
+  }
+  .chain-card h3 {
+    margin-top: 0;
+    margin-bottom: 6px;
+    font-size: 1.1rem;
+  }
+  .chain-card .route {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+  }
+  .chain-card .chain-stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .chain-card .chain-stat {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+  .chain-card .chain-stat span {
+    display: block;
+    font-size: 1.05rem;
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  /* TIER BADGES */
+  .tier { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tier-entry { background: #2a2a2a; color: var(--text-dim); }
+  .tier-1 { background: #1a2a1a; color: #8aab89; }
+  .tier-2 { background: #2a341a; color: #c4d48a; }
+  .tier-3 { background: #342a1a; color: #d4b48a; }
+  .tier-final { background: #1a1a2a; color: #8a9ad4; }
+
+  /* DRUG PROGRESSION */
+  .drug-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .drug-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+  .drug-card .drug-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .drug-card .drug-rarity {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .drug-card .drug-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 4px;
+  }
+  .drug-card .drug-sub {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+  .drug-weed { border-top: 3px solid #6a9a4a; }
+  .drug-weed .drug-name { color: #6a9a4a; }
+  .drug-coke { border-top: 3px solid var(--white); }
+  .drug-coke .drug-name { color: var(--white); }
+  .drug-meth { border-top: 3px solid #4a9ad4; }
+  .drug-meth .drug-name { color: #4a9ad4; }
+
+  /* NOTES/CALLOUTS */
+  .note {
+    background: var(--green-glow);
+    border-left: 3px solid var(--green);
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 0.88rem;
+    border-radius: 0 6px 6px 0;
+  }
+  .note strong { color: var(--green); }
+
+  /* BLUEPRINT CARDS */
+  .bp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .bp-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 20px;
+    border-top: 3px solid var(--green-dim);
+  }
+  .bp-card h4 { margin-top: 0; }
+  .bp-card .bp-sources {
+    display: flex;
+    gap: 12px;
+    margin: 10px 0;
+    flex-wrap: wrap;
+  }
+  .bp-card .bp-source {
+    background: #1a1a1a;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+  }
+  .bp-card .bp-source .pct { color: var(--green); font-weight: 600; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 0.88rem;
+  }
+  .checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--green-dim);
+    border-radius: 3px;
+  }
+  .checklist-heading {
+    color: var(--green);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 32px 0;
+    border-top: 1px solid var(--card-border);
+    color: var(--text-dim);
+    font-size: 0.82rem;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--green-dim); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    header h1 { font-size: 1.6rem; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .chain-grid { grid-template-columns: 1fr; }
+    nav a { padding: 12px 12px; font-size: 0.75rem; }
+    table { font-size: 0.8rem; }
+    thead th, tbody td { padding: 7px 8px; }
+  }
+
+  .table-scroll { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="container">
+    <h1>Crime Economy Rebalance</h1>
+    <div class="subtitle">Server: Sunshine State RP</div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <a href="#baseline">Baseline</a>
+    <a href="#drugs">Drugs</a>
+    <a href="#heists">Heists</a>
+    <a href="#comparison">Comparison</a>
+    <a href="#drops">Drops</a>
+    <a href="#blueprints">Blueprints</a>
+    <a href="#overview">Overview</a>
+    <a href="#config">Config</a>
+    <a href="#checklist">Checklist</a>
+  </div>
+</nav>
+
+<!-- 1. ECONOMY BASELINE -->
+<section id="baseline">
+  <div class="container">
+    <h2>1. Economy Baseline &amp; Design Philosophy</h2>
+
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="label">Legal Job Income</div>
+        <div class="value">$100k</div>
+        <div class="sub">clean / hr</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Crime Target</div>
+        <div class="value">$200k</div>
+        <div class="sub">dirty / hr (active)</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Laundering Cut</div>
+        <div class="value">30%</div>
+        <div class="sub">player keeps 70%</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Gang Cut</div>
+        <div class="value">20%</div>
+        <div class="sub">of dirty earnings</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Solo Criminal (clean)</div>
+        <div class="value">$140k</div>
+        <div class="sub">+40% above legal</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Gang Member (clean)</div>
+        <div class="value">$112k</div>
+        <div class="sub">+12% above legal</div>
+      </div>
+    </div>
+
+    <div class="card card-accent">
+      <h4>Design Principle</h4>
+      <p>Crime must be the more attractive path. A civilian grinding legal jobs at $100k clean/hr should look at criminals earning $200k dirty/hr and feel the pull. Even after laundering at a 30% cut, a solo criminal takes home <strong class="highlight">$140k clean/hr</strong> &mdash; 40% more than any legal job. That gap is the hook that turns civilians into criminals.</p>
+    </div>
+
+    <div class="card card-accent">
+      <h4>Gang Economy</h4>
+      <p>Gangs take a <strong>20% cut</strong> of their members' dirty earnings. This funds the gang treasury for territory, equipment, and paying members who aren't on active jobs. From their 20% intake, gang leaders can afford to <strong>pay soldiers ~50% back</strong> as wages/stipends. A gang member doing crime still clears <strong class="highlight">$112k clean/hr</strong> after both the gang cut and laundering &mdash; still 12% above legal work.</p>
+    </div>
+
+    <h3>Gang Economy Breakdown</h3>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Scenario</th><th>Dirty Earned</th><th>Gang Cut (20%)</th><th>Player Keeps (dirty)</th><th>After Launder (30%)</th><th>vs Legal ($100k)</th></tr></thead>
+      <tbody>
+        <tr><td>Solo criminal</td><td class="money">$200,000</td><td class="dim">&mdash;</td><td class="money">$200,000</td><td class="money">$140,000</td><td class="highlight">+40%</td></tr>
+        <tr><td>Gang member</td><td class="money">$200,000</td><td>$40,000</td><td class="money">$160,000</td><td class="money">$112,000</td><td class="highlight">+12%</td></tr>
+        <tr><td>Gang member (no launder)</td><td class="money">$200,000</td><td>$40,000</td><td class="money">$160,000 dirty</td><td class="dim">&mdash;</td><td>60% more in illegal economy</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="note">
+      <strong>Risk/reward escalation:</strong> The tradeoff isn't money &mdash; it's risk. Police attention, jail time, asset seizure, and losing gear on death are the balancing forces. Drug dealing is steady, moderate-risk income. Heists are bursty, high-reward events that can't be farmed back-to-back.
+    </div>
+  </div>
+</section>
+
+<!-- 2. DRUG ECONOMY -->
+<section id="drugs">
+  <div class="container">
+    <h2>2. Drug Economy</h2>
+
+    <h3>Production Parameters</h3>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="label">Batch Size</div><div class="value">400</div><div class="sub">units</div></div>
+      <div class="stat-box"><div class="label">Production Time</div><div class="value">~2 hrs</div><div class="sub">grow + process + bag</div></div>
+      <div class="stat-box"><div class="label">Input Cost</div><div class="value">~$10k</div><div class="sub">per batch</div></div>
+      <div class="stat-box"><div class="label">Sell Rate</div><div class="value">~100/hr</div><div class="sub">walk-up selling</div></div>
+      <div class="stat-box"><div class="label">Sell Time</div><div class="value">~4 hrs</div><div class="sub">per batch</div></div>
+      <div class="stat-box"><div class="label">Total Cycle</div><div class="value">~6 hrs</div><div class="sub">per batch</div></div>
+    </div>
+
+    <h3>Recommended Sell Prices</h3>
+    <div class="drug-cards">
+      <div class="drug-card drug-weed">
+        <div class="drug-name">Weed</div>
+        <div class="drug-rarity">Common</div>
+        <div class="drug-price">$1,250</div>
+        <div class="drug-sub">per unit &bull; up from $750</div>
+      </div>
+      <div class="drug-card drug-coke">
+        <div class="drug-name">Coke</div>
+        <div class="drug-rarity">Mid-Tier</div>
+        <div class="drug-price">$2,000</div>
+        <div class="drug-sub">per unit &bull; hits 200k/hr target</div>
+      </div>
+      <div class="drug-card drug-meth">
+        <div class="drug-name">Meth</div>
+        <div class="drug-rarity">Rare</div>
+        <div class="drug-price">$3,000</div>
+        <div class="drug-sub">per unit &bull; hardest to produce</div>
+      </div>
+    </div>
+
+    <h3>Revenue Per Batch (400 units)</h3>
+    <table>
+      <thead><tr><th>Drug</th><th>Gross Revenue</th><th>Net (minus $10k costs)</th></tr></thead>
+      <tbody>
+        <tr><td>Weed</td><td class="money">$500,000</td><td class="money">$490,000</td></tr>
+        <tr><td>Coke</td><td class="money">$800,000</td><td class="money">$790,000</td></tr>
+        <tr class="row-highlight"><td>Meth</td><td class="money">$1,200,000</td><td class="money">$1,190,000</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Sell-Hour Rate (active selling only)</h3>
+    <table>
+      <thead><tr><th>Drug</th><th>Dirty $/hr</th><th>Clean $/hr (30% launder)</th><th>vs Legal ($100k)</th></tr></thead>
+      <tbody>
+        <tr><td>Weed</td><td class="money">$125,000</td><td>$87,500</td><td>88%</td></tr>
+        <tr class="row-highlight"><td>Coke</td><td class="money">$200,000</td><td class="money">$140,000</td><td class="highlight">140%</td></tr>
+        <tr><td>Meth</td><td class="money">$300,000</td><td class="money">$210,000</td><td class="highlight">210%</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Full-Cycle Effective Rate (2hr prep + 4hr selling)</h3>
+    <table>
+      <thead><tr><th>Drug</th><th>Effective Dirty $/hr</th><th>Effective Clean $/hr</th><th>vs Legal Jobs</th></tr></thead>
+      <tbody>
+        <tr><td>Weed</td><td>$81,667</td><td>$57,167</td><td class="dim">57% of legal</td></tr>
+        <tr><td>Coke</td><td>$131,667</td><td>$92,167</td><td>92% of legal</td></tr>
+        <tr class="row-highlight"><td>Meth</td><td class="money">$198,333</td><td class="money">$138,833</td><td class="highlight">139% of legal</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card card-accent">
+      <h4>Drug Economy Analysis</h4>
+      <p><strong>Weed</strong> is the entry drug. Full-cycle clean rate is below legal ($57k vs $100k), but the $125k/hr dirty sell rate still beats legal for anyone spending within the illegal economy. It's the gateway.</p>
+      <p><strong>Coke</strong> hits the $200k dirty/hr target during active selling. Full-cycle clean rate ($92k) nearly matches legal. During active selling, the clean rate ($140k) clearly beats it.</p>
+      <p><strong>Meth</strong> is the premium drug. Full-cycle effective rate <strong class="highlight">exceeds legal jobs by 39%</strong> even in clean money. During active selling, it's $210k clean &mdash; more than double legal.</p>
+    </div>
+
+    <h3>Relevant Scripts</h3>
+    <table>
+      <thead><tr><th>Script</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td><code>lation_weed</code></td><td>Weed growing &amp; processing</td></tr>
+        <tr><td><code>lation_coke</code></td><td>Cocaine production</td></tr>
+        <tr><td><code>lation_meth</code></td><td>Meth cooking</td></tr>
+        <tr><td><code>lation_selling</code></td><td>Drug selling mechanics</td></tr>
+        <tr><td><code>k4mb1-cashexchange</code></td><td>Money laundering (dirty &rarr; clean)</td></tr>
+        <tr><td><code>lation_pawnshop</code> / <code>PawnShop</code></td><td>Selling stolen items for cash</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 3. HEIST ECONOMY -->
+<section id="heists">
+  <div class="container">
+    <h2>3. Heist Economy</h2>
+
+    <div class="stat-grid">
+      <div class="stat-box"><div class="label">Avg Equip Cost</div><div class="value">~$25k</div><div class="sub">per heist (team total)</div></div>
+      <div class="stat-box"><div class="label">Min Duration</div><div class="value">~30 min</div><div class="sub">per heist</div></div>
+      <div class="stat-box"><div class="label">Typical Crew</div><div class="value">3</div><div class="sub">players (finals: 3-4)</div></div>
+      <div class="stat-box"><div class="label">All Payouts</div><div class="value">Dirty $</div><div class="sub">money type</div></div>
+    </div>
+
+    <h3>Chain Entry Points</h3>
+    <table>
+      <thead><tr><th>Entry Method</th><th>Frequency</th><th>Chain Access</th></tr></thead>
+      <tbody>
+        <tr><td>Store Robbery</td><td>Anytime (farmable)</td><td>~10-15% keycard/USB drop for any chain</td></tr>
+        <tr><td>Gang Heist (<code>ssrp_gangheist</code>)</td><td>Every 3rd day</td><td>Guaranteed chain entry item</td></tr>
+      </tbody>
+    </table>
+
+    <!-- STORE ROBBERY -->
+    <h3>Store Robbery <span class="tier tier-entry">Entry</span></h3>
+    <div class="card">
+      <p>Players: 2 &bull; Time: ~15-20 min &bull; Equip: ~$5,000 &bull; Script: <code>op-crime</code></p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$20,000 - $30,000 total</td></tr>
+          <tr><td>Cigarette cartons</td><td>2-4 (sell at pawnshop, ~$500 each)</td></tr>
+          <tr><td>Phone accessories</td><td>1-2 (sell at pawnshop, ~$750 each)</td></tr>
+          <tr class="row-highlight"><td>Chain keycard</td><td>~10-15% drop chance</td></tr>
+        </tbody>
+      </table>
+      <p>Per player: ~$12,500 net dirty / ~$37,500-$50,000/hr dirty</p>
+      <div class="note">Store robberies are intentionally low-paying. They are a gateway mechanic, not a grind target. The value is in the keycard drop.</div>
+    </div>
+
+    <!-- GANG HEIST -->
+    <h3>Gang Heist <span class="tier tier-entry">Entry</span></h3>
+    <div class="card">
+      <p>Players: 3-4 &bull; Time: ~25-30 min &bull; Equip: ~$15,000 &bull; Cooldown: Every 3 days &bull; Script: <code>ssrp_gangheist</code></p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$75,000 - $100,000 total</td></tr>
+          <tr><td>Drug packages (mixed)</td><td>15-25 units (~$1,500-$3,000 each via <code>lation_selling</code>)</td></tr>
+          <tr><td>Weapon parts</td><td>1-2 (~$5,000 each at black market)</td></tr>
+          <tr><td>Pistol / SMG</td><td>1 (40% chance, random low-mid tier weapon)</td></tr>
+          <tr class="row-highlight"><td>Chain keycard</td><td>1 (guaranteed, random chain)</td></tr>
+        </tbody>
+      </table>
+      <p>Per player (3): ~$40,000-$58,000 net dirty &bull; Effective rate: ~$96,000-$139,200/hr per player dirty</p>
+      <div class="note">The gang heist is the reliable chain entry method. Every 3 days, a gang gets a guaranteed keycard drop for a random chain. The cash and drug drops are decent side income, and the weapon parts/guns help arm members.</div>
+    </div>
+
+    <!-- CHAIN A -->
+    <h3>Chain A &mdash; Banking <code>op-crime</code></h3>
+    <div class="card">
+      <p class="route">Store/Gang &rarr; Fleeca Bank &rarr; Paleto Bank &rarr; Pacific Standard Vault</p>
+
+      <h4>Fleeca Bank <span class="tier tier-1">Tier 1</span></h4>
+      <p>Players: 3 &bull; Time: ~30 min &bull; Equip: $15,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$150,000</td><td>$50,000</td></tr>
+          <tr><td>Marked bills</td><td>5-8 bags</td><td>~$3,000 each at pawnshop</td></tr>
+          <tr><td>Gold watches</td><td>15-25</td><td>~$600 each at pawnshop</td></tr>
+          <tr class="row-highlight"><td>Paleto Bank access card</td><td>1 (guaranteed)</td><td>Progression</td></tr>
+          <tr class="dim"><td><em>Hacking device</em></td><td><em>1 (30% chance)</em></td><td><em>Reusable tool</em></td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$45,000</strong> &bull; Effective rate: ~$90,000/hr dirty</p>
+
+      <h4>Paleto Bank <span class="tier tier-2">Tier 2 (Doubled)</span></h4>
+      <p>Players: 3 &bull; Time: ~35 min &bull; Equip: $25,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$600,000</td><td>$200,000</td></tr>
+          <tr><td>Gold bars (small)</td><td>3-5</td><td>~$10,000 each at pawnshop</td></tr>
+          <tr><td>Diamond necklaces</td><td>25-50</td><td>~$600 each at pawnshop</td></tr>
+          <tr class="row-highlight"><td>Pacific Standard blueprints</td><td>1 (guaranteed)</td><td>Progression</td></tr>
+          <tr class="dim"><td><em>Advanced lockpick</em></td><td><em>1 (25%)</em></td><td><em>Reusable tool</em></td></tr>
+          <tr class="dim"><td><em>Thermite charge</em></td><td><em>2 (40%)</em></td><td><em>Consumable</em></td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$191,700</strong> &bull; Effective rate: ~$328,600/hr dirty</p>
+
+      <h4>Pacific Standard Vault <span class="tier tier-3">Tier 3 &mdash; Chain Final (Doubled)</span></h4>
+      <p>Players: 3-4 &bull; Time: ~45 min &bull; Equip: $40,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$1,000,000</td><td>$333,333</td></tr>
+          <tr><td>Gold bars (large)</td><td>6-10</td><td>~$15,000 each at pawnshop</td></tr>
+          <tr><td>Loose diamonds</td><td>65-130</td><td>~$600 each at pawnshop</td></tr>
+          <tr><td>Rare art piece</td><td>0-1 (50%)</td><td>~$50,000 at pawnshop</td></tr>
+          <tr class="dim"><td><em>Military-grade pistol</em></td><td><em>1 (15%)</em></td><td><em>Exclusive weapon</em></td></tr>
+          <tr class="row-highlight"><td>Armour Mould Fragment</td><td>1 (25% drop)</td><td>Blueprint piece (need 3)</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$320,033</strong> &bull; Effective rate: ~$426,700/hr dirty</p>
+
+      <h4>Chain A Full Run</h4>
+      <table>
+        <thead><tr><th>Heist</th><th>Time</th><th>Equip/Player</th><th>Net Dirty/Player</th></tr></thead>
+        <tbody>
+          <tr><td>Fleeca Bank</td><td>30 min</td><td>$5,000</td><td class="money">$45,000</td></tr>
+          <tr><td>Paleto Bank</td><td>35 min</td><td>$8,300</td><td class="money">$191,700</td></tr>
+          <tr><td>Pacific Standard</td><td>45 min</td><td>$13,300</td><td class="money">$320,033</td></tr>
+          <tr class="row-bold"><td>Total</td><td>~110 min</td><td>$26,600</td><td class="money">$556,733 + items</td></tr>
+          <tr class="row-highlight"><td>Effective hourly</td><td></td><td></td><td class="money">~$303,700/hr dirty</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CHAIN B -->
+    <h3>Chain B &mdash; Luxury Heists</h3>
+    <div class="card">
+      <p class="route">Store/Gang &rarr; Vangelico Jewelry &rarr; Yacht &rarr; Oil Rig</p>
+
+      <h4>Vangelico Jewelry <span class="tier tier-1">Tier 1</span> &mdash; <code>kq_smash_n_grab2</code></h4>
+      <p>Players: 3 &bull; Time: ~30 min &bull; Equip: $20,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$120,000</td><td>$40,000</td></tr>
+          <tr><td>Loose diamonds</td><td>30-50</td><td>~$600 each at pawnshop</td></tr>
+          <tr><td>Diamond rings</td><td>25-40</td><td>~$600 each at pawnshop</td></tr>
+          <tr><td>Ruby necklaces</td><td>15-20 (60%)</td><td>~$600 each at pawnshop</td></tr>
+          <tr class="row-highlight"><td>Yacht invitation</td><td>1 (guaranteed)</td><td>Progression</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$53,300</strong> &bull; Effective rate: ~$106,600/hr dirty</p>
+
+      <h4>Yacht Heist <span class="tier tier-2">Tier 2 (Doubled)</span> &mdash; <code>rm_yachtheist</code></h4>
+      <p>Players: 3 &bull; Time: ~40 min &bull; Equip: $30,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$700,000</td><td>$233,333</td></tr>
+          <tr><td>Luxury watches</td><td>40-65</td><td>~$600 each at pawnshop</td></tr>
+          <tr><td>Gold chains</td><td>25-45</td><td>~$600 each at pawnshop</td></tr>
+          <tr><td>Safe documents</td><td>2-3</td><td>~$5,000 each at pawnshop</td></tr>
+          <tr class="row-highlight"><td>Oil rig security badge</td><td>1 (guaranteed)</td><td>Progression</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$223,333</strong> &bull; Effective rate: ~$335,000/hr dirty</p>
+
+      <h4>Oil Rig <span class="tier tier-3">Tier 3 &mdash; Chain Final (Doubled)</span> &mdash; <code>rm_oilrigheist</code> / <code>k4mb1-oilrig</code></h4>
+      <p>Players: 3-4 &bull; Time: ~50 min &bull; Equip: $45,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$1,200,000</td><td>$400,000</td></tr>
+          <tr><td>Industrial diamonds</td><td>5-8</td><td>~$12,000 each at pawnshop</td></tr>
+          <tr><td>Military weapon parts</td><td>2-3</td><td>~$15,000 each at black market</td></tr>
+          <tr><td>Encrypted hard drive</td><td>1</td><td>~$40,000 at black market</td></tr>
+          <tr class="dim"><td><em>Rare vehicle key (Insurgent)</em></td><td><em>1 (5%)</em></td><td><em>Exclusive vehicle</em></td></tr>
+          <tr class="dim"><td><em>Thermal scope</em></td><td><em>1 (15%)</em></td><td><em>Weapon attachment</em></td></tr>
+          <tr class="row-highlight"><td>Military Rifle Blueprint Fragment</td><td>1 (25% drop)</td><td>Blueprint piece (need 3)</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$385,000</strong> &bull; Effective rate: ~$462,000/hr dirty</p>
+
+      <h4>Chain B Full Run</h4>
+      <table>
+        <thead><tr><th>Heist</th><th>Time</th><th>Equip/Player</th><th>Net Dirty/Player</th></tr></thead>
+        <tbody>
+          <tr><td>Vangelico</td><td>30 min</td><td>$6,700</td><td class="money">$53,300</td></tr>
+          <tr><td>Yacht</td><td>40 min</td><td>$10,000</td><td class="money">$223,333</td></tr>
+          <tr><td>Oil Rig</td><td>50 min</td><td>$15,000</td><td class="money">$385,000</td></tr>
+          <tr class="row-bold"><td>Total</td><td>~120 min</td><td>$31,700</td><td class="money">$661,633 + items</td></tr>
+          <tr class="row-highlight"><td>Effective hourly</td><td></td><td></td><td class="money">~$330,800/hr dirty</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CHAIN C -->
+    <h3>Chain C &mdash; Cayo Perico</h3>
+    <div class="card">
+      <p class="route">Store/Gang &rarr; Cayo Scope &rarr; Cayo Shipping &rarr; Main Cayo</p>
+
+      <h4>Cayo Scope &amp; Setup <span class="tier tier-1">Tier 1</span> &mdash; <code>ssrp_cayo</code></h4>
+      <p>Players: 3 &bull; Time: ~35 min &bull; Equip: $30,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$180,000</td><td>$60,000</td></tr>
+          <tr><td>Drug packages (mixed)</td><td>20-30 units</td><td>~$1,500 avg each</td></tr>
+          <tr><td>Bearer bonds</td><td>2-3</td><td>~$8,000 each at pawnshop</td></tr>
+          <tr class="row-highlight"><td>Cayo Shipping manifest</td><td>1 (guaranteed)</td><td>Progression</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$65,000</strong> &bull; Effective rate: ~$111,400/hr dirty</p>
+
+      <h4>Cayo Shipping Raid <span class="tier tier-2">Tier 2 (Doubled)</span> &mdash; <code>ssrp_cayoshipping</code></h4>
+      <p>Players: 3 &bull; Time: ~35 min &bull; Equip: $25,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$500,000</td><td>$166,667</td></tr>
+          <tr><td>Drug packages (coke/meth)</td><td>15-25 units</td><td>~$2,500 avg each</td></tr>
+          <tr><td>Shipping manifests</td><td>2-3</td><td>~$6,000 each at pawnshop</td></tr>
+          <tr><td>Gold chains</td><td>25-45</td><td>~$600 each at pawnshop</td></tr>
+          <tr class="row-highlight"><td>Cayo main access codes</td><td>1 (guaranteed)</td><td>Progression</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$158,367</strong> &bull; Effective rate: ~$271,500/hr dirty</p>
+
+      <h4>Main Cayo Perico <span class="tier tier-3">Tier 3 &mdash; Chain Final (Doubled)</span> &mdash; <code>ssrp_cayo2</code></h4>
+      <p>Players: 3-4 &bull; Time: ~50 min &bull; Equip: $50,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$1,600,000</td><td>$533,333</td></tr>
+          <tr><td>Gold bars (large)</td><td>8-12</td><td>~$15,000 each at pawnshop</td></tr>
+          <tr><td>Bearer bonds</td><td>4-6</td><td>~$8,000 each at pawnshop</td></tr>
+          <tr><td>Pink diamond</td><td>0-1 (15%)</td><td>~$150,000 at black market</td></tr>
+          <tr><td>Panther statue</td><td>0-1 (5%)</td><td>~$250,000 at black market</td></tr>
+          <tr class="dim"><td><em>Exclusive vehicle key (Toreador)</em></td><td><em>1 (8%)</em></td><td><em>Exclusive vehicle</em></td></tr>
+          <tr class="row-highlight"><td>AK-47 Blueprint Fragment</td><td>1 (25% drop)</td><td>Blueprint piece (need 3)</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$516,633</strong> &bull; Effective rate: ~$620,000/hr dirty</p>
+      <div class="note"><strong>Main Cayo is the single highest-paying heist in the game.</strong> At $1.6M total, a successful 3-player crew walks away with over $500k each. The pink diamond and panther statue are "jackpot" drops on top of that.</div>
+
+      <h4>Chain C Full Run</h4>
+      <table>
+        <thead><tr><th>Heist</th><th>Time</th><th>Equip/Player</th><th>Net Dirty/Player</th></tr></thead>
+        <tbody>
+          <tr><td>Cayo Scope</td><td>35 min</td><td>$10,000</td><td class="money">$65,000</td></tr>
+          <tr><td>Cayo Shipping</td><td>35 min</td><td>$8,300</td><td class="money">$158,367</td></tr>
+          <tr><td>Main Cayo</td><td>50 min</td><td>$16,700</td><td class="money">$516,633</td></tr>
+          <tr class="row-bold"><td>Total</td><td>~120 min</td><td>$35,000</td><td class="money">$740,000 + items</td></tr>
+          <tr class="row-highlight"><td>Effective hourly</td><td></td><td></td><td class="money">~$370,000/hr dirty</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CHAIN D -->
+    <h3>Chain D &mdash; Casino</h3>
+    <div class="card">
+      <p class="route">Store/Gang &rarr; Casino Floor &rarr; Casino Penthouse</p>
+
+      <h4>Casino Floor Heist <span class="tier tier-1">Tier 1</span> &mdash; <code>k4mb1-casino</code></h4>
+      <p>Players: 3 &bull; Time: ~35 min &bull; Equip: $30,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$200,000</td><td>$66,667</td></tr>
+          <tr><td>Casino chips</td><td>30-50</td><td>~$2,000 each at pawnshop</td></tr>
+          <tr><td>Gold watches</td><td>15-35</td><td>~$600 each at pawnshop</td></tr>
+          <tr class="row-highlight"><td>Penthouse keycard</td><td>1 (guaranteed)</td><td>Progression</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$80,000</strong> &bull; Effective rate: ~$137,100/hr dirty</p>
+
+      <h4>Casino Penthouse <span class="tier tier-3">Tier 2 &mdash; Chain Final (Doubled)</span> &mdash; <code>k4mb1-casinopenthouse</code></h4>
+      <p>Players: 3-4 &bull; Time: ~45 min &bull; Equip: $45,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$1,000,000</td><td>$333,333</td></tr>
+          <tr><td>Loose diamonds</td><td>50-85</td><td>~$600 each at pawnshop</td></tr>
+          <tr><td>Gold bars (large)</td><td>4-6</td><td>~$15,000 each at pawnshop</td></tr>
+          <tr><td>Rare art piece</td><td>0-1 (40%)</td><td>~$50,000 at pawnshop</td></tr>
+          <tr class="dim"><td><em>Exclusive vehicle key (Enus Paragon)</em></td><td><em>1 (6%)</em></td><td><em>Exclusive vehicle</em></td></tr>
+          <tr class="row-highlight"><td>Armour Mould Fragment</td><td>1 (15% drop)</td><td>Secondary source</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$318,333</strong> &bull; Effective rate: ~$424,400/hr dirty</p>
+
+      <h4>Chain D Full Run</h4>
+      <table>
+        <thead><tr><th>Heist</th><th>Time</th><th>Equip/Player</th><th>Net Dirty/Player</th></tr></thead>
+        <tbody>
+          <tr><td>Casino Floor</td><td>35 min</td><td>$10,000</td><td class="money">$80,000</td></tr>
+          <tr><td>Casino Penthouse</td><td>45 min</td><td>$15,000</td><td class="money">$318,333</td></tr>
+          <tr class="row-bold"><td>Total</td><td>~80 min</td><td>$25,000</td><td class="money">$398,333 + items</td></tr>
+          <tr class="row-highlight"><td>Effective hourly</td><td></td><td></td><td class="money">~$298,750/hr dirty</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CHAIN E -->
+    <h3>Chain E &mdash; Rural Underground</h3>
+    <div class="card">
+      <p class="route">Store/Gang &rarr; O'Neil's Ranch &rarr; Butchery &rarr; Mining Shaft</p>
+      <p class="dim" style="font-size:0.85rem;margin-bottom:16px;"><em>Raid the meth ranch, follow the supply chain to the butchery front business, discover and hit the hidden mining operation underneath.</em></p>
+
+      <h4>O'Neil's Ranch <span class="tier tier-1">Tier 1</span> &mdash; <code>ssrp_oneilsranchheist</code></h4>
+      <p>Players: 3 &bull; Time: ~30 min &bull; Equip: $15,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$100,000</td><td>$33,333</td></tr>
+          <tr><td>Meth packages</td><td>15-20 units</td><td>~$3,000 each via <code>lation_selling</code></td></tr>
+          <tr><td>Chemical supplies</td><td>3-5</td><td>~$4,000 each at black market</td></tr>
+          <tr class="row-highlight"><td>Butchery delivery note</td><td>1 (guaranteed)</td><td>Progression</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$50,000</strong> &bull; Effective rate: ~$100,000/hr dirty</p>
+
+      <h4>Butchery <span class="tier tier-2">Tier 2 (Doubled)</span> &mdash; <code>ssrp_butcheryheist</code></h4>
+      <p>Players: 3 &bull; Time: ~30 min &bull; Equip: $20,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$350,000</td><td>$116,667</td></tr>
+          <tr><td>Marked bills</td><td>5-8 bags</td><td>~$3,000 each at pawnshop</td></tr>
+          <tr><td>Frozen contraband</td><td>3-5</td><td>~$8,000 each at black market</td></tr>
+          <tr class="row-highlight"><td>Mining shaft access key</td><td>1 (guaranteed)</td><td>Progression</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$109,967</strong> &bull; Effective rate: ~$219,900/hr dirty</p>
+
+      <h4>Mining Shaft <span class="tier tier-3">Tier 3 &mdash; Chain Final (Doubled)</span> &mdash; <code>ssrp_miningshaftheist</code></h4>
+      <p>Players: 3-4 &bull; Time: ~40 min &bull; Equip: $35,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$800,000</td><td>$266,667</td></tr>
+          <tr><td>Raw gemstones</td><td>5-8</td><td>~$10,000 each at pawnshop</td></tr>
+          <tr><td>Steel ingots</td><td>8-12</td><td>~$2,000 each (crafting material)</td></tr>
+          <tr><td>Kevlar plates</td><td>3-5</td><td>~$3,000 each (crafting material)</td></tr>
+          <tr class="row-highlight"><td>Military Rifle Blueprint Fragment</td><td>1 (15% drop)</td><td>Secondary source</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$254,967</strong> &bull; Effective rate: ~$382,000/hr dirty</p>
+      <div class="note">Chain E has lower cash payouts but the Mining Shaft is the best source of <strong>crafting materials</strong> (steel ingots, kevlar plates, gemstones). Players building blueprint items will want to run this chain repeatedly.</div>
+
+      <h4>Chain E Full Run</h4>
+      <table>
+        <thead><tr><th>Heist</th><th>Time</th><th>Equip/Player</th><th>Net Dirty/Player</th></tr></thead>
+        <tbody>
+          <tr><td>O'Neil's Ranch</td><td>30 min</td><td>$5,000</td><td class="money">$50,000</td></tr>
+          <tr><td>Butchery</td><td>30 min</td><td>$6,700</td><td class="money">$109,967</td></tr>
+          <tr><td>Mining Shaft</td><td>40 min</td><td>$11,700</td><td class="money">$254,967</td></tr>
+          <tr class="row-bold"><td>Total</td><td>~100 min</td><td>$23,400</td><td class="money">$414,934 + materials</td></tr>
+          <tr class="row-highlight"><td>Effective hourly</td><td></td><td></td><td class="money">~$248,900/hr dirty</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CHAIN F -->
+    <h3>Chain F &mdash; Military</h3>
+    <div class="card">
+      <p class="route">Store/Gang &rarr; Merryweather Port &rarr; Humane Labs</p>
+      <p class="dim" style="font-size:0.85rem;margin-bottom:16px;"><em>Infiltrate the Merryweather shipping port for intel and military hardware, then use what you find to breach the Humane Labs research facility.</em></p>
+
+      <h4>Merryweather Port <span class="tier tier-1">Tier 1</span> &mdash; <code>ssrp_merryweatherport</code></h4>
+      <p>Players: 3 &bull; Time: ~35 min &bull; Equip: $25,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$225,000</td><td>$75,000</td></tr>
+          <tr><td>Military weapon parts</td><td>3-5</td><td>~$15,000 each at black market</td></tr>
+          <tr><td>Weapon crates</td><td>1-2</td><td>~$20,000 each at black market</td></tr>
+          <tr class="row-highlight"><td>Humane Labs access codes</td><td>1 (guaranteed)</td><td>Progression</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$96,700</strong> &bull; Effective rate: ~$165,800/hr dirty</p>
+
+      <h4>Humane Labs <span class="tier tier-3">Tier 2 &mdash; Chain Final (Doubled)</span> &mdash; <code>ssrp_humanelabs</code></h4>
+      <p>Players: 3-4 &bull; Time: ~50 min &bull; Equip: $45,000</p>
+      <table>
+        <thead><tr><th>Reward</th><th>Amount</th><th>Per-Player Value</th></tr></thead>
+        <tbody>
+          <tr><td>Cash (dirty)</td><td class="money">$1,300,000</td><td>$433,333</td></tr>
+          <tr><td>Research data drives</td><td>3-5</td><td>~$18,000 each at black market</td></tr>
+          <tr><td>Military scopes</td><td>2-3</td><td>~$8,000 each (crafting material)</td></tr>
+          <tr><td>Experimental compound</td><td>0-1 (35%)</td><td>~$75,000 at black market</td></tr>
+          <tr class="dim"><td><em>Rare vehicle key (Barrage/APC)</em></td><td><em>1 (5%)</em></td><td><em>Exclusive military vehicle</em></td></tr>
+          <tr class="row-highlight"><td>AK-47 Blueprint Fragment</td><td>1 (15% drop)</td><td>Secondary source</td></tr>
+        </tbody>
+      </table>
+      <p>Net per player: <strong class="highlight">$418,333</strong> &bull; Effective rate: ~$502,000/hr dirty</p>
+      <div class="note">Chain F is the most combat-heavy chain. Merryweather and Humane Labs have the heaviest NPC guard presence and highest police response tier. The military hardware drops are unique to this chain.</div>
+
+      <h4>Chain F Full Run</h4>
+      <table>
+        <thead><tr><th>Heist</th><th>Time</th><th>Equip/Player</th><th>Net Dirty/Player</th></tr></thead>
+        <tbody>
+          <tr><td>Merryweather Port</td><td>35 min</td><td>$8,300</td><td class="money">$96,700</td></tr>
+          <tr><td>Humane Labs</td><td>50 min</td><td>$15,000</td><td class="money">$418,333</td></tr>
+          <tr class="row-bold"><td>Total</td><td>~85 min</td><td>$23,300</td><td class="money">$515,033 + items</td></tr>
+          <tr class="row-highlight"><td>Effective hourly</td><td></td><td></td><td class="money">~$363,500/hr dirty</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 4. COMPARISON -->
+<section id="comparison">
+  <div class="container">
+    <h2>4. Chain Comparison</h2>
+
+    <div class="chain-grid">
+      <div class="chain-card">
+        <h3>A &mdash; Banking</h3>
+        <div class="route"><code>op-crime</code> &bull; 3 Tiers &bull; ~110 min</div>
+        <div class="chain-stats">
+          <div class="chain-stat">Net/Player<span>$556,733</span></div>
+          <div class="chain-stat">$/hr<span>$303,700</span></div>
+          <div class="chain-stat">Equip<span>$26,600</span></div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text-dim);">Consistent cash. Most accessible, most "grindable" chain.</p>
+      </div>
+      <div class="chain-card">
+        <h3>B &mdash; Luxury</h3>
+        <div class="route">Vangelico &rarr; Yacht &rarr; Oil Rig &bull; 3 Tiers &bull; ~120 min</div>
+        <div class="chain-stats">
+          <div class="chain-stat">Net/Player<span>$661,633</span></div>
+          <div class="chain-stat">$/hr<span>$330,800</span></div>
+          <div class="chain-stat">Equip<span>$31,700</span></div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text-dim);">Highest total payout. Rich sellable item drops.</p>
+      </div>
+      <div class="chain-card">
+        <h3>C &mdash; Cayo Perico</h3>
+        <div class="route">Scope &rarr; Shipping &rarr; Main Cayo &bull; 3 Tiers &bull; ~120 min</div>
+        <div class="chain-stats">
+          <div class="chain-stat">Net/Player<span>$740,000</span></div>
+          <div class="chain-stat">$/hr<span>$370,000</span></div>
+          <div class="chain-stat">Equip<span>$35,000</span></div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text-dim);">Highest single-heist payout. Jackpot drops (diamond/statue).</p>
+      </div>
+      <div class="chain-card">
+        <h3>D &mdash; Casino</h3>
+        <div class="route">Floor &rarr; Penthouse &bull; 2 Tiers &bull; ~80 min</div>
+        <div class="chain-stats">
+          <div class="chain-stat">Net/Player<span>$398,333</span></div>
+          <div class="chain-stat">$/hr<span>$298,750</span></div>
+          <div class="chain-stat">Equip<span>$25,000</span></div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text-dim);">Shortest chain. Fast and punchy for less time.</p>
+      </div>
+      <div class="chain-card">
+        <h3>E &mdash; Rural</h3>
+        <div class="route">Ranch &rarr; Butchery &rarr; Mining &bull; 3 Tiers &bull; ~100 min</div>
+        <div class="chain-stats">
+          <div class="chain-stat">Net/Player<span>$414,934</span></div>
+          <div class="chain-stat">$/hr<span>$248,900</span></div>
+          <div class="chain-stat">Equip<span>$23,400</span></div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text-dim);">Primary source of crafting materials. Lower cash, high utility.</p>
+      </div>
+      <div class="chain-card">
+        <h3>F &mdash; Military</h3>
+        <div class="route">Merryweather &rarr; Humane Labs &bull; 2 Tiers &bull; ~85 min</div>
+        <div class="chain-stats">
+          <div class="chain-stat">Net/Player<span>$515,033</span></div>
+          <div class="chain-stat">$/hr<span>$363,500</span></div>
+          <div class="chain-stat">Equip<span>$23,300</span></div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text-dim);">Most combat-intensive. Unique military hardware/weapons.</p>
+      </div>
+    </div>
+
+    <h3>Chain Entry Gating</h3>
+    <div class="card card-accent">
+      <p>Assuming 10-15% keycard drop from store robberies:</p>
+      <p>Average stores needed: <strong>7-10 robberies</strong> &bull; At ~17 min per store: <strong>2-3 hours of farming</strong> to start one chain</p>
+      <p>Gang heist alternative: every 3 days (guaranteed entry)</p>
+      <p>A player realistically gets <strong>1-2 chain runs per play session</strong> through store farming, or a guaranteed start every 3 days. Chains remain special events, not daily grinds.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. ITEM DROPS -->
+<section id="drops">
+  <div class="container">
+    <h2>5. Item Drop Tables</h2>
+
+    <h3>Item Categories</h3>
+    <table>
+      <thead><tr><th>Category</th><th>Description</th><th>Where to Sell</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Sellable valuables</strong></td><td>Jewelry, gold, art, bonds</td><td><code>lation_pawnshop</code> / <code>PawnShop</code> / <code>r_blackmarket</code></td></tr>
+        <tr><td><strong>Progression items</strong></td><td>Keycards, blueprints, codes</td><td>Used to unlock next heist tier</td></tr>
+        <tr><td><strong>Tools/Equipment</strong></td><td>Lockpicks, hacking devices, thermite</td><td>Reusable or consumable</td></tr>
+        <tr><td><strong>Weapons/Attachments</strong></td><td>Exclusive guns, tints, scopes</td><td>Personal use / <code>r_blackmarket</code></td></tr>
+        <tr><td><strong>Vehicles</strong></td><td>Rare vehicle keys</td><td>Personal use (exclusive unlocks)</td></tr>
+        <tr><td><strong>Cosmetics</strong></td><td>Clothing sets, weapon tints</td><td>Personal use</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">Jewelry prices remain at the current ~$600 each. Drop quantities have been increased to match the rebalanced economy. Non-jewelry items (gold bars, art, military gear, etc.) have proposed price increases.</div>
+
+    <h3>Sell Values &mdash; Pawnshop / Black Market</h3>
+
+    <h4>Jewelry (all $600 each at pawnshop)</h4>
+    <table>
+      <thead><tr><th>Item</th><th>Sell Value</th><th>Found In</th></tr></thead>
+      <tbody>
+        <tr><td>Loose diamond</td><td class="money">$600</td><td>Vangelico, Pacific Standard, Casino Penthouse</td></tr>
+        <tr><td>Diamond ring</td><td class="money">$600</td><td>Vangelico</td></tr>
+        <tr><td>Ruby necklace</td><td class="money">$600</td><td>Vangelico</td></tr>
+        <tr><td>Diamond necklace</td><td class="money">$600</td><td>Paleto Bank</td></tr>
+        <tr><td>Gold watch</td><td class="money">$600</td><td>Fleeca Bank, Casino Floor</td></tr>
+        <tr><td>Luxury watch</td><td class="money">$600</td><td>Yacht</td></tr>
+        <tr><td>Gold chain</td><td class="money">$600</td><td>Yacht, Cayo Shipping</td></tr>
+      </tbody>
+    </table>
+
+    <h4>Non-Jewelry Valuables</h4>
+    <table>
+      <thead><tr><th>Item</th><th>Sell Value</th><th>Found In</th></tr></thead>
+      <tbody>
+        <tr><td>Cigarette cartons</td><td>$500</td><td>Store Robbery</td></tr>
+        <tr><td>Phone accessories</td><td>$750</td><td>Store Robbery</td></tr>
+        <tr><td>Casino chip</td><td class="money">$2,000</td><td>Casino Floor</td></tr>
+        <tr><td>Steel ingot</td><td>$2,000</td><td>Mining Shaft (crafting)</td></tr>
+        <tr><td>Kevlar plate</td><td>$3,000</td><td>Mining Shaft (crafting)</td></tr>
+        <tr><td>Marked bills (bag)</td><td class="money">$3,000</td><td>Fleeca Bank, Butchery</td></tr>
+        <tr><td>Chemical supplies</td><td>$4,000</td><td>O'Neil's Ranch</td></tr>
+        <tr><td>Safe documents</td><td class="money">$5,000</td><td>Yacht</td></tr>
+        <tr><td>Shipping manifest</td><td class="money">$6,000</td><td>Cayo Shipping</td></tr>
+        <tr><td>Bearer bond</td><td class="money">$8,000</td><td>Cayo Scope, Main Cayo</td></tr>
+        <tr><td>Frozen contraband</td><td class="money">$8,000</td><td>Butchery</td></tr>
+        <tr><td>Military scope</td><td class="money">$8,000</td><td>Humane Labs (crafting)</td></tr>
+        <tr><td>Small gold bar</td><td class="money">$10,000</td><td>Paleto Bank</td></tr>
+        <tr><td>Raw gemstone</td><td class="money">$10,000</td><td>Mining Shaft</td></tr>
+        <tr><td>Industrial diamond</td><td class="money">$12,000</td><td>Oil Rig</td></tr>
+        <tr><td>Large gold bar</td><td class="money">$15,000</td><td>Pacific Standard, Main Cayo, Casino Penthouse</td></tr>
+        <tr><td>Military weapon parts</td><td class="money">$15,000</td><td>Oil Rig, Merryweather</td></tr>
+        <tr><td>Research data drive</td><td class="money">$18,000</td><td>Humane Labs</td></tr>
+        <tr><td>Weapon crate</td><td class="money">$20,000</td><td>Merryweather Port</td></tr>
+        <tr><td>Encrypted hard drive</td><td class="money">$40,000</td><td>Oil Rig</td></tr>
+        <tr><td>Rare art piece</td><td class="money">$50,000</td><td>Pacific Standard, Casino Penthouse</td></tr>
+        <tr><td>Experimental compound</td><td class="money">$75,000</td><td>Humane Labs (35%)</td></tr>
+        <tr><td>Pink diamond</td><td class="money">$150,000</td><td>Main Cayo (15%)</td></tr>
+        <tr><td>Panther statue</td><td class="money">$250,000</td><td>Main Cayo (5%)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Rare Vehicle Drops</h3>
+    <table>
+      <thead><tr><th>Vehicle</th><th>Source</th><th>Drop Chance</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Insurgent Custom</td><td>Oil Rig</td><td>5%</td><td>Not sellable, personal use</td></tr>
+        <tr><td>Toreador</td><td>Main Cayo</td><td>8%</td><td>Not sellable, personal use</td></tr>
+      </tbody>
+    </table>
+    <div class="note">These are intentionally rare and non-sellable. They're status symbols and bragging rights &mdash; a reason to keep running chains.</div>
+  </div>
+</section>
+
+<!-- 5.4 BLUEPRINTS -->
+<section id="blueprints">
+  <div class="container">
+    <h2>5.4 Blueprint Fragment System</h2>
+    <p>Chain finals have a chance to drop <strong>blueprint fragments</strong> &mdash; rare pieces that, when collected in full, unlock the ability to craft exclusive top-tier gear at weapon/armour benches. These are the ultimate long-term chase items.</p>
+
+    <div class="bp-grid">
+      <div class="bp-card">
+        <h4>Heavy Tactical Armour</h4>
+        <p style="font-size:0.85rem;color:var(--text-dim);">Blueprint: Armour Mould &bull; 3 fragments needed</p>
+        <div class="bp-sources">
+          <div class="bp-source">Pacific Standard (A) <span class="pct">25%</span></div>
+          <div class="bp-source">Casino Penthouse (D) <span class="pct">15%</span></div>
+        </div>
+        <p style="font-size:0.85rem;">Best armour in game. ~60% damage reduction. Breaks after heavy use.</p>
+        <p style="font-size:0.82rem;color:var(--text-dim);">Crafting: 3x Fragments + $50,000 + 10x Kevlar Plates + 5x Steel Ingots</p>
+      </div>
+      <div class="bp-card">
+        <h4>Military-Grade Carbine</h4>
+        <p style="font-size:0.85rem;color:var(--text-dim);">Blueprint: Military Rifle &bull; 3 fragments needed</p>
+        <div class="bp-sources">
+          <div class="bp-source">Oil Rig (B) <span class="pct">25%</span></div>
+          <div class="bp-source">Mining Shaft (E) <span class="pct">15%</span></div>
+        </div>
+        <p style="font-size:0.85rem;">High-accuracy automatic rifle. Better range/damage than standard ARs. Unique skin.</p>
+        <p style="font-size:0.82rem;color:var(--text-dim);">Crafting: 3x Fragments + $75,000 + 8x Weapon Parts + 3x Military Scopes</p>
+      </div>
+      <div class="bp-card">
+        <h4>Gold-Plated AK-47</h4>
+        <p style="font-size:0.85rem;color:var(--text-dim);">Blueprint: AK-47 &bull; 3 fragments needed</p>
+        <div class="bp-sources">
+          <div class="bp-source">Main Cayo (C) <span class="pct">25%</span></div>
+          <div class="bp-source">Humane Labs (F) <span class="pct">15%</span></div>
+        </div>
+        <p style="font-size:0.85rem;">Highest DPS automatic weapon. Distinctive gold skin (visible status symbol). Loud.</p>
+        <p style="font-size:0.82rem;color:var(--text-dim);">Crafting: 3x Fragments + $100,000 + 10x Weapon Parts + 5x Gold Bars</p>
+      </div>
+    </div>
+
+    <h3>Expected Runs to Complete</h3>
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="label">Primary Source (25%)</div>
+        <div class="value">~12</div>
+        <div class="sub">chain final runs avg</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Secondary Source (15%)</div>
+        <div class="value">~20</div>
+        <div class="sub">chain final runs avg</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Best Case</div>
+        <div class="value">3</div>
+        <div class="sub">runs (extremely lucky)</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Time to Complete</div>
+        <div class="value">3-6 wks</div>
+        <div class="sub">of active play</div>
+      </div>
+    </div>
+
+    <div class="note">Fragments from primary and secondary sources are the <strong>same item</strong> &mdash; they stack. A player could get 2 fragments from Pacific Standard and 1 from Casino Penthouse to complete the Armour Mould.</div>
+
+    <h3>Blueprint Design Rules</h3>
+    <div class="card card-accent">
+      <ol style="padding-left:18px;font-size:0.9rem;">
+        <li style="margin-bottom:8px;"><strong>Fragments are personal.</strong> Cannot be traded, sold, or dropped.</li>
+        <li style="margin-bottom:8px;"><strong>Crafted items are NOT permanent.</strong> Weapons degrade and armour breaks. Creates ongoing material sink.</li>
+        <li style="margin-bottom:8px;"><strong>Crafted items CAN be lost.</strong> If you die and get looted, or get arrested, the item is gone.</li>
+        <li style="margin-bottom:8px;"><strong>Re-crafting is cheaper.</strong> Once complete, future crafts only need materials + money (no fragments).</li>
+        <li><strong>Fragments persist through death/arrest.</strong> Stored in separate blueprint inventory that isn't lootable.</li>
+      </ol>
+    </div>
+
+    <h3>Material Sources</h3>
+    <table>
+      <thead><tr><th>Material</th><th>Source</th><th>Cost/Effort</th></tr></thead>
+      <tbody>
+        <tr><td>Kevlar Plates</td><td><code>gangshop</code> / <code>r_blackmarket</code></td><td>~$3,000 each</td></tr>
+        <tr><td>Steel Ingots</td><td><code>ssrp_scrapyard</code> / Mining Shaft</td><td>~$2,000 each or farmed</td></tr>
+        <tr><td>Weapon Parts</td><td><code>r_blackmarket</code> / heist drops</td><td>~$5,000 each or dropped</td></tr>
+        <tr><td>Military Scopes</td><td>Oil Rig drops / <code>r_blackmarket</code></td><td>~$8,000 each</td></tr>
+        <tr><td>Gold Bars</td><td>Vault / Main Cayo drops / pawnshop</td><td>~$15,000 each</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note"><strong>Economy note:</strong> The full cost to craft a Gold-Plated AK-47 (once blueprint is complete) is roughly <strong>$250,000</strong> in materials + cash. Combined with the weeks of heist grinding for fragments, these weapons have real weight. Losing one to a police seizure or a rival crew actually stings.</div>
+  </div>
+</section>
+
+<!-- 6. ECONOMY OVERVIEW -->
+<section id="overview">
+  <div class="container">
+    <h2>6. Complete Economy Overview</h2>
+
+    <h3>All Income Methods Ranked</h3>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Method</th><th>Dirty $/hr</th><th>Clean $/hr (30%)</th><th>Gang Member Clean</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr style="background:#1a1a2a;"><td>Legal jobs</td><td class="dim">&mdash;</td><td>$100,000</td><td class="dim">&mdash;</td><td>None</td></tr>
+        <tr><td>Store robbery</td><td>$37,500-$50,000</td><td>$26,250-$35,000</td><td>$21,000-$28,000</td><td>None</td></tr>
+        <tr><td>Weed (full cycle)</td><td>$81,667</td><td>$57,167</td><td>$45,733</td><td>Low XP</td></tr>
+        <tr><td>Fleeca Bank</td><td>$90,000</td><td>$63,000</td><td>$50,400</td><td>Chain card</td></tr>
+        <tr><td>Gang heist</td><td>$96,000-$139,200</td><td>$67,200-$97,440</td><td>$53,760-$77,952</td><td>Gang (3 days)</td></tr>
+        <tr><td>O'Neil's Ranch</td><td>$100,000</td><td>$70,000</td><td>$56,000</td><td>Chain card</td></tr>
+        <tr><td>Vangelico</td><td>$106,600</td><td>$74,620</td><td>$59,696</td><td>Chain card</td></tr>
+        <tr><td>Cayo Scope</td><td>$111,400</td><td>$77,980</td><td>$62,384</td><td>Chain card</td></tr>
+        <tr><td>Coke (full cycle)</td><td>$131,667</td><td>$92,167</td><td>$73,733</td><td>Mid XP</td></tr>
+        <tr><td>Casino Floor</td><td>$137,100</td><td>$95,970</td><td>$76,776</td><td>Chain card</td></tr>
+        <tr><td>Merryweather Port</td><td>$165,800</td><td>$116,060</td><td>$92,848</td><td>Chain card</td></tr>
+        <tr class="row-highlight"><td>Meth (full cycle)</td><td class="money">$198,333</td><td class="money">$138,833</td><td class="money">$111,067</td><td>High XP</td></tr>
+        <tr><td>Butchery</td><td>$219,900</td><td>$153,930</td><td>$123,144</td><td>Chain prog.</td></tr>
+        <tr><td>Rural (E full)</td><td>$248,900</td><td>$174,230</td><td>$139,384</td><td>Chain prog.</td></tr>
+        <tr><td>Cayo Shipping</td><td>$271,500</td><td>$190,050</td><td>$152,040</td><td>Chain prog.</td></tr>
+        <tr><td>Casino (D full)</td><td>$298,750</td><td>$209,125</td><td>$167,300</td><td>Chain prog.</td></tr>
+        <tr><td>Banking (A full)</td><td>$303,700</td><td>$212,590</td><td>$170,072</td><td>Chain prog.</td></tr>
+        <tr><td>Paleto Bank</td><td>$328,600</td><td>$230,020</td><td>$184,016</td><td>Chain prog.</td></tr>
+        <tr><td>Luxury (B full)</td><td>$330,800</td><td>$231,560</td><td>$185,248</td><td>Chain prog.</td></tr>
+        <tr><td>Yacht</td><td>$335,000</td><td>$234,500</td><td>$187,600</td><td>Chain prog.</td></tr>
+        <tr><td>Military (F full)</td><td>$363,500</td><td>$254,450</td><td>$203,560</td><td>Chain prog.</td></tr>
+        <tr><td>Cayo (C full)</td><td>$370,000</td><td>$259,000</td><td>$207,200</td><td>Chain prog.</td></tr>
+        <tr><td>Mining Shaft</td><td class="money">$382,000</td><td class="money">$267,400</td><td class="money">$213,920</td><td>Chain prog.</td></tr>
+        <tr><td>Casino Penthouse</td><td class="money">$424,400</td><td class="money">$297,080</td><td class="money">$237,664</td><td>Chain prog.</td></tr>
+        <tr><td>Pacific Standard</td><td class="money">$426,700</td><td class="money">$298,690</td><td class="money">$238,952</td><td>Chain final</td></tr>
+        <tr><td>Oil Rig</td><td class="money">$462,000</td><td class="money">$323,400</td><td class="money">$258,720</td><td>Chain final</td></tr>
+        <tr><td>Humane Labs</td><td class="money">$502,000</td><td class="money">$351,400</td><td class="money">$281,120</td><td>Chain final</td></tr>
+        <tr class="row-bold" style="background:#1a2a1a;"><td>Main Cayo</td><td class="money">$620,000</td><td class="money">$434,000</td><td class="money">$347,200</td><td>Chain final</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3>Key Balance Points</h3>
+    <div class="card card-accent">
+      <ol style="padding-left:18px;font-size:0.9rem;">
+        <li style="margin-bottom:12px;"><strong>Crime always out-earns legal work &mdash; at every level.</strong> Even weed at $81k dirty/hr beats legal when spent in the illegal economy. Chain finals like Main Cayo ($620k dirty/hr) are life-changing paydays.</li>
+        <li style="margin-bottom:12px;"><strong>Gang members still out-earn legal workers.</strong> After the 20% gang cut AND 30% laundering, a gang member running meth still clears $111k clean/hr. No scenario where a criminal is worse off than a legal grinder.</li>
+        <li style="margin-bottom:12px;"><strong>Gangs can fund themselves.</strong> A gang with 4 active members doing a Cayo chain generates ~$592k for the treasury per run.</li>
+        <li style="margin-bottom:12px;"><strong>Heists are weekly events, not daily grinds.</strong> A full Cayo chain pays $740k per player &mdash; enough to fund a week of operations.</li>
+        <li style="margin-bottom:12px;"><strong>Six chains create variety and specialisation.</strong> Banking for cash. Luxury for items. Cayo for jackpots. Casino for quick runs. Rural for crafting. Military for weapons.</li>
+        <li><strong>Blueprint fragments create long-term chase.</strong> The endgame loop &mdash; weeks of grinding toward a Gold AK or Heavy Tactical Armour.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 7. ADDITIONAL -->
+<section>
+  <div class="container">
+    <h2>7. Additional Crime Activities</h2>
+    <p>These scripts exist on the server and should complement (not compete with) the core drug/heist economy:</p>
+    <table>
+      <thead><tr><th>Script</th><th>Activity</th><th>Suggested Role</th></tr></thead>
+      <tbody>
+        <tr><td><code>lation_chopshop</code></td><td>Vehicle chopping</td><td>Side income, ~$50-80k/hr dirty. Good for downtime.</td></tr>
+        <tr><td><code>op-vehiclerobbery</code></td><td>Vehicle theft</td><td>Feed into chopshop. $15-30k per vehicle.</td></tr>
+        <tr><td><code>rahe-boosting</code></td><td>Vehicle boosting</td><td>Higher-end vehicle theft. $40-60k per boost contract.</td></tr>
+        <tr><td><code>r_blackmarket</code></td><td>Black market trading</td><td>Hub for selling heist items, buying equipment.</td></tr>
+        <tr><td><code>gangshop</code></td><td>Gang shop</td><td>Gang-exclusive items, equipment discounts.</td></tr>
+        <tr><td><code>ssrp_scrapyard</code></td><td>Scrapyard</td><td>Low-tier material farming for equipment crafting.</td></tr>
+        <tr><td><code>lunar_cryptomining</code></td><td>Crypto mining</td><td>Passive income while offline. ~$20-30k/day dirty.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 8. CONFIG -->
+<section id="config">
+  <div class="container">
+    <h2>8. Recommended Config Changes</h2>
+
+    <h3>Drug Sell Prices (<code>lation_selling</code>)</h3>
+    <div class="card">
+      <table>
+        <thead><tr><th>Drug</th><th>Current</th><th></th><th>Proposed</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td>Weed</td><td>$750</td><td>&rarr;</td><td class="money">$1,250</td><td class="highlight">+67%</td></tr>
+          <tr><td>Coke</td><td class="dim">TBD</td><td>&rarr;</td><td class="money">$2,000</td><td>&mdash;</td></tr>
+          <tr><td>Meth</td><td class="dim">TBD</td><td>&rarr;</td><td class="money">$3,000</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Heist Payouts</h3>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Heist</th><th>Script</th><th>Proposed (total dirty)</th><th>Tier</th></tr></thead>
+      <tbody>
+        <tr><td>Store Robbery</td><td><code>op-crime</code></td><td>$20,000 - $30,000</td><td><span class="tier tier-entry">Entry</span></td></tr>
+        <tr><td>Gang Heist</td><td><code>ssrp_gangheist</code></td><td class="money">$75,000 - $100,000 + drugs/weapons</td><td><span class="tier tier-entry">Entry (3 days)</span></td></tr>
+        <tr style="background:#111;"><td colspan="4" style="color:var(--green);font-weight:600;">Chain A &mdash; Banking</td></tr>
+        <tr><td>Fleeca Bank</td><td><code>op-crime</code></td><td class="money">$150,000</td><td><span class="tier tier-1">T1</span></td></tr>
+        <tr><td>Paleto Bank</td><td><code>op-crime</code></td><td class="money">$600,000</td><td><span class="tier tier-2">T2 (doubled)</span></td></tr>
+        <tr><td>Pacific Standard</td><td><code>op-crime</code></td><td class="money">$1,000,000</td><td><span class="tier tier-3">T3 (doubled)</span></td></tr>
+        <tr style="background:#111;"><td colspan="4" style="color:var(--green);font-weight:600;">Chain B &mdash; Luxury</td></tr>
+        <tr><td>Vangelico</td><td><code>kq_smash_n_grab2</code></td><td class="money">$120,000 + items</td><td><span class="tier tier-1">T1</span></td></tr>
+        <tr><td>Yacht</td><td><code>rm_yachtheist</code></td><td class="money">$700,000 + items</td><td><span class="tier tier-2">T2 (doubled)</span></td></tr>
+        <tr><td>Oil Rig</td><td><code>rm_oilrigheist</code></td><td class="money">$1,200,000 + items</td><td><span class="tier tier-3">T3 (doubled)</span></td></tr>
+        <tr style="background:#111;"><td colspan="4" style="color:var(--green);font-weight:600;">Chain C &mdash; Cayo Perico</td></tr>
+        <tr><td>Cayo Scope</td><td><code>ssrp_cayo</code></td><td class="money">$180,000 + items</td><td><span class="tier tier-1">T1</span></td></tr>
+        <tr><td>Cayo Shipping</td><td><code>ssrp_cayoshipping</code></td><td class="money">$500,000 + items</td><td><span class="tier tier-2">T2 (doubled)</span></td></tr>
+        <tr><td>Main Cayo</td><td><code>ssrp_cayo2</code></td><td class="money">$1,600,000 + items</td><td><span class="tier tier-3">T3 (doubled)</span></td></tr>
+        <tr style="background:#111;"><td colspan="4" style="color:var(--green);font-weight:600;">Chain D &mdash; Casino</td></tr>
+        <tr><td>Casino Floor</td><td><code>k4mb1-casino</code></td><td class="money">$200,000 + items</td><td><span class="tier tier-1">T1</span></td></tr>
+        <tr><td>Casino Penthouse</td><td><code>k4mb1-casinopenthouse</code></td><td class="money">$1,000,000 + items</td><td><span class="tier tier-2">T2 (doubled)</span></td></tr>
+        <tr style="background:#111;"><td colspan="4" style="color:var(--green);font-weight:600;">Chain E &mdash; Rural Underground</td></tr>
+        <tr><td>O'Neil's Ranch</td><td><code>ssrp_oneilsranchheist</code></td><td class="money">$100,000 + items</td><td><span class="tier tier-1">T1</span></td></tr>
+        <tr><td>Butchery</td><td><code>ssrp_butcheryheist</code></td><td class="money">$350,000 + items</td><td><span class="tier tier-2">T2 (doubled)</span></td></tr>
+        <tr><td>Mining Shaft</td><td><code>ssrp_miningshaftheist</code></td><td class="money">$800,000 + materials</td><td><span class="tier tier-3">T3 (doubled)</span></td></tr>
+        <tr style="background:#111;"><td colspan="4" style="color:var(--green);font-weight:600;">Chain F &mdash; Military</td></tr>
+        <tr><td>Merryweather Port</td><td><code>ssrp_merryweatherport</code></td><td class="money">$225,000 + items</td><td><span class="tier tier-1">T1</span></td></tr>
+        <tr><td>Humane Labs</td><td><code>ssrp_humanelabs</code></td><td class="money">$1,300,000 + items</td><td><span class="tier tier-2">T2 (doubled)</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3>Equipment Costs</h3>
+    <table>
+      <thead><tr><th>Item</th><th>Suggested Price</th></tr></thead>
+      <tbody>
+        <tr><td>Basic lockpick</td><td class="money">$2,000</td></tr>
+        <tr><td>Advanced lockpick</td><td class="money">$5,000</td></tr>
+        <tr><td>Hacking device</td><td class="money">$8,000</td></tr>
+        <tr><td>Thermite charge</td><td class="money">$6,000</td></tr>
+        <tr><td>Scuba gear</td><td class="money">$3,000</td></tr>
+        <tr><td>Grappling hook</td><td class="money">$4,000</td></tr>
+        <tr><td>Glass cutter</td><td class="money">$5,000</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Laundering Rate (<code>k4mb1-cashexchange</code>)</h3>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="label">Laundering Cut</div><div class="value">30%</div><div class="sub">player keeps 70%</div></div>
+      <div class="stat-box"><div class="label">Gang Cut</div><div class="value">20%</div><div class="sub">configurable per gang</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. CHECKLIST -->
+<section id="checklist">
+  <div class="container">
+    <h2>9. Implementation Checklist</h2>
+
+    <div class="checklist-heading">Drugs</div>
+    <ul class="checklist">
+      <li>Update <code>lation_selling</code> config with new drug prices (weed $1,250, coke $2,000, meth $3,000)</li>
+      <li>Update <code>lation_weed</code>, <code>lation_coke</code>, <code>lation_meth</code> production costs if needed (~$10k per 400)</li>
+    </ul>
+
+    <div class="checklist-heading">Entry Points</div>
+    <ul class="checklist">
+      <li>Configure <code>op-crime</code> store robbery payouts ($20-30k range)</li>
+      <li>Add chain keycard drops to store robbery loot tables (10-15% chance, any chain)</li>
+      <li>Configure <code>ssrp_gangheist</code> payout to $75-100k cash + drug/weapon drops + guaranteed chain keycard (every 3 days)</li>
+    </ul>
+
+    <div class="checklist-heading">Chain A &mdash; Banking</div>
+    <ul class="checklist">
+      <li>Set Fleeca Bank payout to $150,000 + item drops</li>
+      <li>Set Paleto Bank payout to $600,000 + item drops</li>
+      <li>Set Pacific Standard Vault payout to $1,000,000 + item drops + Armour Mould Fragment (25%)</li>
+    </ul>
+
+    <div class="checklist-heading">Chain B &mdash; Luxury</div>
+    <ul class="checklist">
+      <li>Configure Vangelico payout to $120,000 + jewelry items (increased drop qty at ~$600/item)</li>
+      <li>Configure <code>rm_yachtheist</code> payout to $700,000 + luxury items</li>
+      <li>Configure <code>rm_oilrigheist</code> / <code>k4mb1-oilrig</code> payout to $1,200,000 + Military Rifle Fragment (25%)</li>
+    </ul>
+
+    <div class="checklist-heading">Chain C &mdash; Cayo Perico</div>
+    <ul class="checklist">
+      <li>Configure <code>ssrp_cayo</code> (scope) payout to $180,000 + items</li>
+      <li>Configure <code>ssrp_cayoshipping</code> payout to $500,000 + items</li>
+      <li>Configure <code>ssrp_cayo2</code> (main) payout to $1,600,000 + jackpot items + AK-47 Fragment (25%)</li>
+    </ul>
+
+    <div class="checklist-heading">Chain D &mdash; Casino</div>
+    <ul class="checklist">
+      <li>Configure <code>k4mb1-casino</code> (floor) payout to $200,000 + items</li>
+      <li>Configure <code>k4mb1-casinopenthouse</code> payout to $1,000,000 + items + Armour Mould Fragment (15%)</li>
+    </ul>
+
+    <div class="checklist-heading">Chain E &mdash; Rural Underground</div>
+    <ul class="checklist">
+      <li>Configure <code>ssrp_oneilsranchheist</code> payout to $100,000 + meth/chemical items</li>
+      <li>Configure <code>ssrp_butcheryheist</code> payout to $350,000 + items</li>
+      <li>Configure <code>ssrp_miningshaftheist</code> payout to $800,000 + crafting materials + Military Rifle Fragment (15%)</li>
+    </ul>
+
+    <div class="checklist-heading">Chain F &mdash; Military</div>
+    <ul class="checklist">
+      <li>Configure <code>ssrp_merryweatherport</code> payout to $225,000 + military hardware</li>
+      <li>Configure <code>ssrp_humanelabs</code> payout to $1,300,000 + items + AK-47 Fragment (15%)</li>
+    </ul>
+
+    <div class="checklist-heading">Economy Systems</div>
+    <ul class="checklist">
+      <li>Set <code>k4mb1-cashexchange</code> laundering rate to 30%</li>
+      <li>Add item definitions for all heist drops to <code>ox_inventory</code> / inventory system</li>
+      <li>Configure <code>lation_pawnshop</code> / <code>PawnShop</code> buy prices for all sellable items</li>
+      <li>Configure <code>r_blackmarket</code> prices for military/rare items</li>
+      <li>Add blueprint fragment items and crafting recipes to weapon/armour benches</li>
+      <li>Set rare vehicle drop chances on chain finals</li>
+    </ul>
+
+    <div class="checklist-heading">Testing</div>
+    <ul class="checklist">
+      <li>Test Chain A: store &rarr; Fleeca &rarr; Paleto &rarr; Pacific Standard</li>
+      <li>Test Chain B: store &rarr; Vangelico &rarr; Yacht &rarr; Oil Rig</li>
+      <li>Test Chain C: store &rarr; Cayo Scope &rarr; Cayo Shipping &rarr; Main Cayo</li>
+      <li>Test Chain D: store &rarr; Casino Floor &rarr; Casino Penthouse</li>
+      <li>Test Chain E: store &rarr; O'Neil's Ranch &rarr; Butchery &rarr; Mining Shaft</li>
+      <li>Test Chain F: store &rarr; Merryweather Port &rarr; Humane Labs</li>
+      <li>Test blueprint fragment accumulation and bench crafting</li>
+      <li>Monitor economy post-launch and adjust</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Document prepared for server owner review. All values are recommendations based on a $100k clean/hr legal baseline and $200k dirty/hr crime target with 30% laundering cut.</p>
+    <p style="margin-top:8px;color:#555;">Server Framework: ESX</p>
+  </div>
+</footer>
+
+</body>
+</html>
